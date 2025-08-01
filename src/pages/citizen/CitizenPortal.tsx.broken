@@ -1,0 +1,13 @@
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import CitizenHome from './components/CitizenHome';
+
+const CitizenPortal: React.FC = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<CitizenHome />} />
+    </Routes>
+  );
+};
+
+export default CitizenPortal;
