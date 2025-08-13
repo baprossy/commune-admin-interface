@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FileText, CreditCard, Calendar, History } from 'lucide-react';
-import Header from './Header';
+
 import TabNavigation from './TabNavigation';
 import OverviewTab from './tabs/OverviewTab';
 import DemandsTab from './tabs/DemandsTab';
@@ -141,7 +141,7 @@ const CitizenHome: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* En-tête */}
-      <Header userName={userName} />
+      
 
       {/* Navigation par onglets */}
       {activeTab !== 'overview' && (
