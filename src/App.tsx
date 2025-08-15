@@ -40,7 +40,7 @@ function App() {
   const handleLogin = (email: string, password: string, fullName?: string, userType?: string) => {
     const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
     let user = users.find((u: User) => u.email === email);
-    
+
     if (!user && email.includes('admin')) {
       user = {
         id: 'admin-' + Date.now(),
@@ -52,12 +52,12 @@ function App() {
         role: 'admin' as const
       };
     }
-    
+
     if (!user) {
       // Créer utilisateur avec les infos du login
       const [firstName, ...lastNameParts] = (fullName || 'Utilisateur Inconnu').split(' ');
       const lastName = lastNameParts.join(' ') || 'Inconnu';
-      
+
       user = {
         id: (userType === 'agent' ? 'agent-' : 'citizen-') + Date.now(),
         firstName: firstName,
@@ -73,44 +73,46 @@ function App() {
         })
       };
     }
-    
+
     setCurrentUser(user);
     localStorage.setItem('currentUser', JSON.stringify(user));
     return true;
   };
 
+  // 🔧 FONCTION CORRIGÉE - userType au lieu de role
   const handleRegister = (userData: {
     firstName: string;
     lastName: string;
     email: string;
     phone: string;
     address: string;
-    role?: string;
+    userType?: string;  // ✅ CORRIGÉ : userType au lieu de role
     matricule?: string;
     service?: string;
     fonction?: string;
     commune?: string;
+    adresseCommune?: string;
   }) => {
     const newUser: User = {
-      id: (userData.role === 'agent' ? 'agent-' : 'citizen-') + Date.now(),
+      id: (userData.userType === 'agent' ? 'agent-' : 'citizen-') + Date.now(),
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
       phone: userData.phone,
       address: userData.address,
-      role: (userData.role as 'admin' | 'citizen' | 'agent') || 'citizen',
-      ...(userData.role === 'agent' && {
+      role: (userData.userType as 'admin' | 'citizen' | 'agent') || 'citizen',  // ✅ CORRIGÉ
+      ...(userData.userType === 'agent' && {  // ✅ CORRIGÉ
         matricule: userData.matricule,
         service: userData.service,
         fonction: userData.fonction,
         commune: userData.commune
       })
     };
-    
+
     const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
     const updatedUsers = [...existingUsers, newUser];
     localStorage.setItem('registeredUsers', JSON.stringify(updatedUsers));
-    
+
     setCurrentUser(newUser);
     localStorage.setItem('currentUser', JSON.stringify(newUser));
     return true;
@@ -126,31 +128,31 @@ function App() {
       <Router>
         <div className="min-h-screen bg-gray-50">
           <Routes>
-            <Route 
-              path="/admin/*" 
+            <Route
+              path="/admin/*"
               element={
                 currentUser.role === 'admin' ? (
                   <AdminDashboard />
                 ) : (
                   <Navigate to="/dashboard" />
                 )
-              } 
+              }
             />
-            <Route 
-              path="/dashboard/*" 
+            <Route
+              path="/dashboard/*"
               element={
                 <>
-                  <Header 
-                    userName={`${currentUser.firstName} ${currentUser.lastName}`} 
-                    currentUser={currentUser} 
+                  <Header
+                    userName={`${currentUser.firstName} ${currentUser.lastName}`}
+                    currentUser={currentUser}
                   />
                   <CitizenPortal currentUser={currentUser} />
                 </>
-              } 
+              }
             />
             <Route path="/" element={
-              currentUser.role === 'admin' ? 
-                <Navigate to="/admin" /> : 
+              currentUser.role === 'admin' ?
+                <Navigate to="/admin" /> :
                 <Navigate to="/dashboard" />
             } />
             <Route path="*" element={<Navigate to="/" />} />

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { User, FileText, CreditCard, Calendar, Settings, Home } from 'lucide-react';
 import CitizenHome from './components/CitizenHome';
+import ServicesPage from './pages/ServicesPage';
 
 // Interface pour les props du composant principal
 interface CitizenPortalProps {
@@ -16,6 +17,7 @@ interface CitizenPortalProps {
     matricule?: string;
     service?: string;
     fonction?: string;
+    commune?: string;
   };
 }
 
@@ -261,14 +263,7 @@ const CitizenDocuments = () => (
   </div>
 );
 
-const CitizenServices = () => (
-  <div className="max-w-4xl mx-auto p-6">
-    <h2 className="text-3xl font-bold text-gray-800 mb-8">Services</h2>
-    <div className="bg-white rounded-lg shadow p-6">
-      <p className="text-gray-600">Fonctionnalité en cours de développement...</p>
-    </div>
-  </div>
-);
+const CitizenServices = () => <ServicesPage />;
 
 const CitizenRequests = () => (
   <div className="max-w-4xl mx-auto p-6">
